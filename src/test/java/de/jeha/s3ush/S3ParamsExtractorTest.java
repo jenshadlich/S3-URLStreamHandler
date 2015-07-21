@@ -2,8 +2,7 @@ package de.jeha.s3ush;
 
 import org.junit.Test;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
+import java.io.IOException;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
@@ -14,10 +13,10 @@ import static org.junit.Assert.assertEquals;
 public class S3ParamsExtractorTest {
 
     @Test
-    public void test() throws MalformedURLException, UnsupportedEncodingException {
+    public void test() throws IOException {
         URL url = new URL("s3://accessKey:secretKey@bucket.endpoint/key");
 
-        S3Params s3Params = S3ParamsExtractor.extract(url);
+        final S3Params s3Params = S3ParamsExtractor.extract(url);
 
         assertEquals("accessKey", s3Params.getAccessKey());
         assertEquals("secretKey", s3Params.getSecretKey());
