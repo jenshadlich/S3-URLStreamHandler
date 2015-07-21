@@ -18,6 +18,10 @@ import java.net.URLConnection;
  */
 public class S3URLConnection extends URLConnection {
 
+    public static final String PROP_S3_HANDLER_USER_AGENT = "s3.handler.userAgent";
+    public static final String PROP_S3_HANDLER_PROTOCOL = "s3.handler.protocol";
+    public static final String PROP_S3_HANDLER_SIGNER_OVERRIDE = "s3.handler.signerOverride";
+
     /**
      * Constructs a URL connection to the specified URL. A connection to
      * the object referenced by the URL is not created.
@@ -30,37 +34,42 @@ public class S3URLConnection extends URLConnection {
 
     @Override
     public InputStream getInputStream() throws IOException {
-        final String userAgent = System.getProperty("s3.handler.userAgent", null);
-        final String protocol = System.getProperty("s3.handler.protocol", "https").toLowerCase();
-        final String signerOverride = System.getProperty("s3.handler.signerOverride", null);
+        final S3Params s3Params = S3ParamsExtractor.extract(url);
+        final AWSCredentials credentials = new BasicAWSCredentials(s3Params.getAccessKey(), s3Params.getSecretKey());
 
-        S3Params s3Params = S3ParamsExtractor.extract(url);
+        final ClientConfiguration clientConfig = buildClientConfig();
 
-        AWSCredentials credentials = new BasicAWSCredentials(s3Params.getAccessKey(), s3Params.getSecretKey());
-
-        ClientConfiguration clientConfig = new ClientConfiguration()
-                .withProtocol("https".equals(protocol)
-                        ? Protocol.HTTPS
-                        : Protocol.HTTP);
-
-        if (userAgent != null) {
-            clientConfig.setUserAgent(userAgent);
-        }
-
-        if (signerOverride != null) {
-            clientConfig.setSignerOverride(signerOverride);
-        }
-
-        AmazonS3 s3Client = new AmazonS3Client(credentials, clientConfig);
+        final AmazonS3 s3Client = new AmazonS3Client(credentials, clientConfig);
         s3Client.setEndpoint(s3Params.getEndpoint());
 
-        S3Object object = s3Client.getObject(s3Params.getBucket(), s3Params.getKey());
+        final S3Object object = s3Client.getObject(s3Params.getBucket(), s3Params.getKey());
+
         return object.getObjectContent();
     }
 
     @Override
     public void connect() throws IOException {
         // do nothing
+    }
+
+    // -----------------------------------------------------------------------------------------------------------------
+
+    private ClientConfiguration buildClientConfig() {
+        final String userAgent = System.getProperty(PROP_S3_HANDLER_USER_AGENT, null);
+        final String protocol = System.getProperty(PROP_S3_HANDLER_PROTOCOL, "https").toLowerCase();
+        final String signerOverride = System.getProperty(PROP_S3_HANDLER_SIGNER_OVERRIDE, null);
+
+        final ClientConfiguration clientConfig = new ClientConfiguration()
+                .withProtocol("https".equals(protocol) ? Protocol.HTTPS : Protocol.HTTP);
+
+        if (userAgent != null) {
+            clientConfig.setUserAgent(userAgent);
+        }
+        if (signerOverride != null) {
+            clientConfig.setSignerOverride(signerOverride);
+        }
+
+        return clientConfig;
     }
 
 }
