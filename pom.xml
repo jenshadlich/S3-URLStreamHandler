@@ -1,12 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.jeha.s3ush</groupId>
     <artifactId>s3ush</artifactId>
     <name>S3 URLStreamHandler</name>
     <packaging>jar</packaging>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
     <description>S3 URLStreamHandler for Java</description>
 
     <developers>
@@ -20,7 +19,7 @@
         <connection>scm:git:git://github.com/jenshadlich/S3-URLStreamHandler.git</connection>
         <developerConnection>scm:git:https://github.com/jenshadlich/S3-URLStreamHandler.git</developerConnection>
         <url>https://github.com/jenshadlich/S3-URLStreamHandler.git</url>
-        <tag>HEAD</tag>
+        <tag>s3ush-0.1</tag>
     </scm>
 
     <properties>
