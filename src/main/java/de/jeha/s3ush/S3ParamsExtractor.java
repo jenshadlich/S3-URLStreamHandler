@@ -9,7 +9,11 @@ import java.net.URLDecoder;
  */
 class S3ParamsExtractor {
 
-    public static S3Params extract(URL url) throws IOException {
+    public static S3Params extract(URL url) throws IOException, IllegalArgumentException {
+
+        if (!"s3".equals(url.getProtocol())) {
+            throw new IllegalArgumentException("Unsupported protocol '" + url.getProtocol() + "'");
+        }
 
         //aws credentials
         String accessKey = null;
