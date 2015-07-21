@@ -1,6 +1,6 @@
 package de.jeha.s3ush;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLDecoder;
 
@@ -9,7 +9,8 @@ import java.net.URLDecoder;
  */
 class S3ParamsExtractor {
 
-    public static S3Params extract(URL url) throws UnsupportedEncodingException {
+    public static S3Params extract(URL url) throws IOException {
+
         //aws credentials
         String accessKey = null;
         String secretKey = null;
@@ -28,7 +29,7 @@ class S3ParamsExtractor {
 
         // endpoint
         String endpoint = url.getHost().substring(url.getHost().indexOf(".") + 1);
-        if (url.getPort() != 80) {
+        if (url.getPort() != 80 && url.getPort() != 443) {
             endpoint += ":" + url.getPort();
         }
 
