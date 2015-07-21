@@ -30,21 +30,26 @@ public class S3URLConnection extends URLConnection {
 
     @Override
     public InputStream getInputStream() throws IOException {
+        final String userAgent = System.getProperty("s3.handler.userAgent", null);
+        final String protocol = System.getProperty("s3.handler.protocol", "https").toLowerCase();
+        final String signerOverride = System.getProperty("s3.handler.signerOverride", null);
 
         S3Params s3Params = S3ParamsExtractor.extract(url);
 
         AWSCredentials credentials = new BasicAWSCredentials(s3Params.getAccessKey(), s3Params.getSecretKey());
 
-        // TODO: make configurable via system property
         ClientConfiguration clientConfig = new ClientConfiguration()
-                .withProtocol(Protocol.HTTP)
-                .withUserAgent("s3ush");
+                .withProtocol("https".equals(protocol)
+                        ? Protocol.HTTPS
+                        : Protocol.HTTP);
 
-        //if (useOldS3Signer) {
+        if (userAgent != null) {
+            clientConfig.setUserAgent(userAgent);
+        }
 
-        // TODO: make signer override configurable
-        clientConfig.setSignerOverride("S3Signer");
-        //}
+        if (signerOverride != null) {
+            clientConfig.setSignerOverride(signerOverride);
+        }
 
         AmazonS3 s3Client = new AmazonS3Client(credentials, clientConfig);
         s3Client.setEndpoint(s3Params.getEndpoint());
