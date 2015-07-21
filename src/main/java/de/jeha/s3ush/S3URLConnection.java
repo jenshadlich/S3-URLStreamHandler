@@ -35,11 +35,14 @@ public class S3URLConnection extends URLConnection {
 
         AWSCredentials credentials = new BasicAWSCredentials(s3Params.getAccessKey(), s3Params.getSecretKey());
 
+        // TODO: make configurable via system property
         ClientConfiguration clientConfig = new ClientConfiguration()
                 .withProtocol(Protocol.HTTP)
                 .withUserAgent("s3ush");
 
         //if (useOldS3Signer) {
+
+        // TODO: make signer override configurable
         clientConfig.setSignerOverride("S3Signer");
         //}
 
