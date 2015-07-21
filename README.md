@@ -7,13 +7,13 @@ E.g. with `IOUtils` from Apache `commons-io` it's very easy to retrieve the cont
 String content = IOUtils.toString(new URL("s3://accessKey:secrectKey@bucket.endpoint/key"));
 ```
 
-###### URL format:
+##### URL format:
 ```
 s3://<accessKey>:<secretKey>@<bucket>.<endpoint>/<key>
 ```
 The endpoint would normally be `s3.amazonaws.com` but if you want to use some other S3 service (like Ceph with radosgw) you are free to do so :smile:
 
-###### S3 client configuration
+##### S3 client configuration
 The S3 client configuration is no directly accessible because of the nature the protocol handler. My current solution is to use system properties.
 
 The following properties are supported:
