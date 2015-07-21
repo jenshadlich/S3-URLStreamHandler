@@ -29,7 +29,7 @@ class S3ParamsExtractor {
 
         // endpoint
         String endpoint = url.getHost().substring(url.getHost().indexOf(".") + 1);
-        if (url.getPort() != 80 && url.getPort() != 443) {
+        if (url.getPort() != 80 && url.getPort() != 443 && url.getPort() > 0) {
             endpoint += ":" + url.getPort();
         }
 
