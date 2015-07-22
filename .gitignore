@@ -3,3 +3,5 @@ s3ush.iml
 s3ush.iws
 s3ush.ipr
 target
+pom.xml.releaseBackup
+release.properties
