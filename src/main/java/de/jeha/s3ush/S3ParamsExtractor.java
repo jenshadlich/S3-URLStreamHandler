@@ -23,6 +23,24 @@ class S3ParamsExtractor {
             String[] credentials = url.getUserInfo().split("[:]");
             accessKey = URLDecoder.decode(credentials[0], "UTF-8");
             secretKey = URLDecoder.decode(credentials[1], "UTF-8");
+        } else {
+            if (url.getQuery() != null) {
+                String[] queryStrings = url.getQuery().split("&");
+                if (queryStrings.length == 2) {
+                    for (String query : queryStrings) {
+                        String[] parts = query.split("=");
+                        if (parts.length == 2) {
+                            String valueDecoded = URLDecoder.decode(parts[1], "UTF-8");
+                            if ("accessKey".equals(parts[0])) {
+                                accessKey = valueDecoded;
+                            }
+                            if ("secretKey".equals(parts[0])) {
+                                secretKey = valueDecoded;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         // bucket
